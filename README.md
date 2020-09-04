@@ -1,1 +1,2 @@
-# biostat_data_mining_2020_fall
+# biostat data mining 2020 fall
+This respository contains the HW submission for PHS597 data mining course.
