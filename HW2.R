@@ -147,30 +147,29 @@ PLS_self <- function(X, Y) {
 X <- scale(as.matrix(mtcars[, -1]))
 Y<- scale(as.matrix(mtcars[, 1]))
 
-res <- PLS_self(a, b)
+# self defined PLS function 
+res <- PLS_self(X, Y)
 
-fit1 <- lm(b~res[,c(1:3)])
-summary(unlist(fit1))
 
-fit <- plsr(b~a, scale = FALSE)
+# R based pls function 
+fit <- plsr(Y~X, scale = FALSE)
 
-fit$loadings
-summary(fit$coefficients)
-m1 <- fit$scores[,1]
-sum(standardize(res)[,1]^2)
+# components from score results 
+fit$scores
 
-sum(m1^2)
+# compare all 10 components from these two functions 
+for (i in 1:ncol(res)) {
+  a <- res[, 1]
+  b <- fit$scores[, 1]
+  
+  # calculate the angle between corresponding components in two functions
+  theta <- acos(sum(a*b) / ( sqrt(sum(a * a)) * sqrt(sum(b * b))))
+  
+  # all angles are 0 thus the two functions give the same vector 
+  print(paste0("The angle between the ", i, "th components in two function is ", theta))
+}
 
-fit$scores[,1] %*% fit$scores[,2]
-t(res) %*% res
-t(res_no) %*% res_no
 
-res_no <- apply(res, 2, normal_vec)
 
-fit_no <- apply(fit$scores, 2, normal_vec)
-
-t(fit_no) %*% fit_no
-
-t(res) %*% X[, 10] 
 
 
